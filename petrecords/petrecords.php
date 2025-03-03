@@ -29,7 +29,7 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
 
     
     $stmt->close();
-    $conn->close();
+    
 }
     // for upadting pet records
     $request_uri = explode("/", $_SERVER['REQUEST_URI']);
@@ -61,7 +61,7 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         }
 
         $stmt->close();
-        $conn->close();
+        
 } 
     // for deleting pet records
     if ($_SERVER["REQUEST_METHOD"] == "DELETE" && is_numeric($id)) {
@@ -78,7 +78,7 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         }
 
         $stmt->close();
-        $conn->close();
+        
 }
 
     // used to view records or fetch all records
@@ -94,5 +94,5 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
     } else{
         echo json_encode(["message" => "No records Found."]);
     }
-    $conn->close();
+$conn->close();
 ?>
