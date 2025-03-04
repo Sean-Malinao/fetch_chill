@@ -47,8 +47,6 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
 
         // SQL query to update data
         $sql = "UPDATE petrecords SET ownername=?, petname=?, breed=?, weight=?, age=?, gender=?, diagnosis=?, treatment=?, visitdate=? WHERE id=?";
-
-        // Prepare and bind
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssiiisssi", $ownername, $petname, $breed, $weight, $age, $gender, $diagnosis, $treatment, $visitdate, $id);
 
@@ -80,7 +78,28 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         $stmt->close();
         
 }
+    //for searching owner name for pet records
+    if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['ownername'])) {
+        $ownername = $_GET['ownername'];
+        $sql = "SELECT * FROM petrecords WHERE ownername LIKE ?";
+        $stmt = $conn->prepare($sql);
+        $search_term = "%" . $ownername . "%";
+        $stmt->bind_param("s", $search_term);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
+        if ($result->num_rows > 0) {
+            $records = array();
+            while ($row = $result->fetch_assoc()) {
+                $records[] = $row;
+            }
+            echo json_encode($records);
+        } else {
+            echo json_encode(["message" => "No records found."]);
+        }
+
+        $stmt->close();
+}
     // used to view records or fetch all records
     $sql = "SELECT * FROM petrecords";
     $result = $conn->query($sql);
