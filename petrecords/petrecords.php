@@ -13,13 +13,14 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
     $age = $input ['age'];
     $gender = $input ['gender'];
     $diagnosis = $input ['diagnosis'];
-    $treatment =$input ['treatment'];
+    $treatment = $input ['treatment'];
+    $vaccine = $input ['vaccine'];
     $visitdate = $input ['visitdate'];
 
 
-    $sql ="INSERT INTO petrecords (ownername, petname, species, breed, weight, age, gender, diagnosis, treatment, visitdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql ="INSERT INTO petrecords (ownername, petname, species, breed, weight, age, gender, diagnosis, treatment, vaccine, visitdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt=$conn->prepare($sql);
-    $stmt->bind_param("ssssiiisss", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment, $visitdate);
+    $stmt->bind_param("ssssiiissss", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment, $vaccine, $visitdate);
 
     $result = $stmt->execute();
     if($result){
@@ -46,12 +47,13 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         $gender = $input['gender'];
         $diagnosis = $input['diagnosis'];
         $treatment = $input['treatment'];
+        $vaccine = $input ['vaccine'];
         $visitdate = $input['visitdate'];
 
         // SQL query to update data
-        $sql = "UPDATE petrecords SET ownername=?, petname=?, species=?, breed=?, weight=?, age=?, gender=?, diagnosis=?, treatment=?, visitdate=? WHERE id=?";
+        $sql = "UPDATE petrecords SET ownername=?, petname=?, species=?, breed=?, weight=?, age=?, gender=?, diagnosis=?, treatment=?, vaccine=? visitdate=? WHERE id=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssiiisssi", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment, $visitdate, $id);
+        $stmt->bind_param("ssssiiissssi", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment,$vaccine, $visitdate, $id);
 
         // Execute and check
         $result = $stmt->execute();
