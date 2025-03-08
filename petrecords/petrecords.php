@@ -7,6 +7,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 if($_SERVER ["REQUEST_METHOD"] == "POST"){
     $ownername = $input ['ownername'];
     $petname = $input ['petname'];
+    $species = $input['species'];
     $breed = $input ['breed'];
     $weight = $input['weight'];
     $age = $input ['age'];
@@ -16,9 +17,9 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
     $visitdate = $input ['visitdate'];
 
 
-    $sql ="INSERT INTO petrecords (ownername, petname, breed, weight, age, gender, diagnosis, treatment, visitdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql ="INSERT INTO petrecords (ownername, petname, species, breed, weight, age, gender, diagnosis, treatment, visitdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt=$conn->prepare($sql);
-    $stmt->bind_param("sssiiisss", $ownername, $petname, $breed, $weight, $age, $gender, $diagnosis, $treatment, $visitdate);
+    $stmt->bind_param("ssssiiisss", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment, $visitdate);
 
     $result = $stmt->execute();
     if($result){
@@ -29,6 +30,7 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
 
     
     $stmt->close();
+    exit();
     
 }
     // for upadting pet records
@@ -37,6 +39,7 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
     if ($_SERVER["REQUEST_METHOD"] == "PUT" && is_numeric($id)) {
         $ownername = $input['ownername'];
         $petname = $input['petname'];
+        $species = $input['species'];
         $breed = $input['breed'];
         $weight = $input['weight'];
         $age = $input['age'];
@@ -46,9 +49,9 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         $visitdate = $input['visitdate'];
 
         // SQL query to update data
-        $sql = "UPDATE petrecords SET ownername=?, petname=?, breed=?, weight=?, age=?, gender=?, diagnosis=?, treatment=?, visitdate=? WHERE id=?";
+        $sql = "UPDATE petrecords SET ownername=?, petname=?, species=?, breed=?, weight=?, age=?, gender=?, diagnosis=?, treatment=?, visitdate=? WHERE id=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssiiisssi", $ownername, $petname, $breed, $weight, $age, $gender, $diagnosis, $treatment, $visitdate, $id);
+        $stmt->bind_param("ssssiiisssi", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment, $visitdate, $id);
 
         // Execute and check
         $result = $stmt->execute();
@@ -59,6 +62,7 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         }
 
         $stmt->close();
+        exit();
         
 } 
     // for deleting pet records
@@ -72,10 +76,11 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         if ($stmt->execute() && $stmt->affected_rows > 0) {
             echo json_encode(["message" => "Record deleted successfully!"]);
         } else {
-            echo json_encode(["message" => "Record does not exist"]);
+            echo json_encode(["message" => "Record not found."]);
         }
 
         $stmt->close();
+        exit();
         
 }
     //for searching owner name for pet records
@@ -99,6 +104,7 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         }
 
         $stmt->close();
+        exit();
 }
     // used to view records or fetch all records
     $sql = "SELECT * FROM petrecords";
@@ -113,5 +119,6 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
     } else{
         echo json_encode(["message" => "No records Found."]);
     }
+    exit();
 $conn->close();
 ?>
