@@ -15,12 +15,14 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
     $diagnosis = $input ['diagnosis'];
     $treatment = $input ['treatment'];
     $vaccine = $input ['vaccine'];
+    $veterinarian = $input ['veterinarian'];
     $visitdate = $input ['visitdate'];
 
 
-    $sql ="INSERT INTO petrecords (ownername, petname, species, breed, weight, age, gender, diagnosis, treatment, vaccine, visitdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql ="INSERT INTO petrecords (ownername, petname, species, breed, weight, age, gender, diagnosis, treatment, vaccine, veterinarian, 
+    visitdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt=$conn->prepare($sql);
-    $stmt->bind_param("ssssiiissss", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment, $vaccine, $visitdate);
+    $stmt->bind_param("ssssiiisssss", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment, $vaccine, $veterinarian, $visitdate);
 
     $result = $stmt->execute();
     if($result){
@@ -47,13 +49,15 @@ if($_SERVER ["REQUEST_METHOD"] == "POST"){
         $gender = $input['gender'];
         $diagnosis = $input['diagnosis'];
         $treatment = $input['treatment'];
-        $vaccine = $input ['vaccine'];
+        $vaccine = $input['vaccine'];
+        $veterinarian = $input['veterinarian'];
         $visitdate = $input['visitdate'];
 
         // SQL query to update data
-        $sql = "UPDATE petrecords SET ownername=?, petname=?, species=?, breed=?, weight=?, age=?, gender=?, diagnosis=?, treatment=?, vaccine=? visitdate=? WHERE id=?";
+        $sql = "UPDATE petrecords SET ownername=?, petname=?, species=?, breed=?, weight=?, age=?, gender=?, diagnosis=?, treatment=?, veterinarian=?, 
+        vaccine=? visitdate=? WHERE id=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssiiissssi", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment,$vaccine, $visitdate, $id);
+        $stmt->bind_param("ssssiiisssssi", $ownername, $petname, $species, $breed, $weight, $age, $gender, $diagnosis, $treatment,$vaccine, $veterinarian, $visitdate, $id);
 
         // Execute and check
         $result = $stmt->execute();
